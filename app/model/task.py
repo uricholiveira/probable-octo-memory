@@ -1,0 +1,24 @@
+import arrow
+from app.ext.db import Base
+from passlib.context import CryptContext
+from sqlalchemy import Column, Integer, String, Boolean, DateTime, ForeignKey
+from sqlalchemy.orm import relationship
+
+
+class TaskUser(Base):
+    __tablename__ = 'task_user'
+    user = Column(Integer, ForeignKey('user.id'), primary_key=True)
+    task = Column(Integer, ForeignKey('task.id'), primary_key=True)
+    is_owner = Column(Boolean, nullable=True, default=False)
+
+
+class Task(Base):
+    __tablename__ = 'task'
+    id = Column(Integer, primary_key=True, index=True, autoincrement=True)
+    name = Column(String(255), index=True)
+    owner = Column(Integer, ForeignKey('user.id'))
+    created_at = Column(DateTime, nullable=False, default=arrow.utcnow().datetime)
+    arrow.get()
+    updated_at = Column(DateTime, nullable=True, default=None, onupdate=arrow.utcnow().datetime)
+    users = relationship("User", secondary="task_user", back_populates="tasks")
+    items = relationship("Item")
