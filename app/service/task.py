@@ -84,6 +84,8 @@ def del_user_from_task(db: Session, taskid: int, userid: int) -> Union[JSONRespo
     task_user = db.query(model.TaskUser).filter(model.TaskUser.user == userid, model.TaskUser.task == task.id).first()
     if not task_user:
         raise HTTPException(status_code=404, detail='User is not in task')
+    if task_user.is_owner:
+        raise HTTPException(status_code=409, detail='Cannot delete a user owner')
     db.delete(task_user)
     db.commit()
     return JSONResponse(status_code=200, content={'message': 'User removed from task'})

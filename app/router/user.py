@@ -57,7 +57,7 @@ def login(db: Session = Depends(get_db), form: authentication_schema.Login = Dep
 def login(db: Session = Depends(get_db), form: OAuth2PasswordRequestForm = Depends()):
     user = authentication_service.authenticate_user(db, form)
     if not user:
-        raise HTTPException(status_code=404, detail='Incorrect email or password', headers={'Authorization': 'Bearer'})
+        raise HTTPException(status_code=404, detail='Incorrect email or passwoord', headers={'Authorization': 'Bearer'})
     access_token_expires = timedelta(minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES)
     access_token = authentication_service.create_access_token(data={'sub': user.email},
                                                               expires_delta=access_token_expires)

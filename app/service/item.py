@@ -68,6 +68,7 @@ def patch_item(db: Session, itemid: int, item: schema.ItemPatch) -> Union[model.
 
 def delete_item(db: Session, itemid: int, user) -> Union[JSONResponse, HTTPException]:
     item = get_item_by_id(db, itemid)
+    item_history = db.query(model.ItemHistory).filter(model.ItemHistory.item == item.id).delete()
     db.delete(item)
     db.commit()
     return JSONResponse(status_code=200, content='Item deleted')
