@@ -11,8 +11,8 @@ def get_all_priorities(db: Session, skip: int = 0, limit: int = 100) -> List[mod
     return db.query(model.Priority).offset(skip).limit(limit).all()
 
 
-def get_priority_by_id(db: Session, priorityid: int) -> Union[model.Priority, HTTPException]:
-    priority = db.query(model.Priority).filter(model.Priority.id == priorityid).first()
+def get_priority_by_id(db: Session, priority_id: int) -> Union[model.Priority, HTTPException]:
+    priority = db.query(model.Priority).filter(model.Priority.id == priority_id).first()
     if not priority:
         raise HTTPException(status_code=404, detail='Priority not found')
     return priority
@@ -28,8 +28,9 @@ def create_new_priority(db: Session, priority: schema.PriorityBase) -> Union[mod
     return new_priority
 
 
-def update_priority(db: Session, priorityid: int, priority: schema.PriorityBase) -> Union[model.Priority, HTTPException]:
-    updated_priority = get_priority_by_id(db, priorityid)
+def update_priority(db: Session, priority_id: int, priority: schema.PriorityBase) -> Union[
+    model.Priority, HTTPException]:
+    updated_priority = get_priority_by_id(db, priority_id)
     for field in priority.dict(exclude_none=True):
         setattr(updated_priority, field, priority.dict()[field])
     db.add(updated_priority)
@@ -38,8 +39,9 @@ def update_priority(db: Session, priorityid: int, priority: schema.PriorityBase)
     return updated_priority
 
 
-def patch_priority(db: Session, priorityid: int, priority: schema.PriorityBase) -> Union[model.Priority, HTTPException]:
-    updated_priority = get_priority_by_id(db, priorityid)
+def patch_priority(db: Session, priority_id: int, priority: schema.PriorityPatch) -> Union[
+    model.Priority, HTTPException]:
+    updated_priority = get_priority_by_id(db, priority_id)
     for field in priority.dict(exclude_unset=True, exclude_none=True):
         setattr(updated_priority, field, priority.dict()[field])
     db.add(updated_priority)
@@ -48,8 +50,8 @@ def patch_priority(db: Session, priorityid: int, priority: schema.PriorityBase) 
     return updated_priority
 
 
-def delete_priority(db: Session, priorityid: int) -> Union[JSONResponse, HTTPException]:
-    priority = get_priority_by_id(db, priorityid)
+def delete_priority(db: Session, priority_id: int) -> Union[JSONResponse, HTTPException]:
+    priority = get_priority_by_id(db, priority_id)
     db.delete(priority)
     db.commit()
     return JSONResponse(status_code=200, content={'detail': 'Priority deleted'})

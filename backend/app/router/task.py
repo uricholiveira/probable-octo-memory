@@ -11,32 +11,32 @@ from app.schema import task as task_schema, authentication as authentication_sch
 router = APIRouter(prefix='/task', tags=['Task'])
 
 
-@router.get('/', response_model=List[task_schema.TaskOut], description='Get list of all tasks')
+@router.get('/all', response_model=List[task_schema.TaskOut], description='Get list of all tasks')
 def get_all_tasks(db: Session = Depends(get_db), skip: int = 0, limit: int = 100):
     return task_service.get_all_task(db=db, skip=skip, limit=limit)
 
 
-@router.get('/{taskid}', response_model=task_schema.TaskOut, description='Get task by ID')
-def get_task_by_id(db: Session = Depends(get_db), taskid: int = None):
-    return task_service.get_task_by_id(db, taskid)
+@router.get('/', response_model=task_schema.TaskOut, description='Get task by ID')
+def get_task_by_id(db: Session = Depends(get_db), task_id: int = None):
+    return task_service.get_task_by_id(db, task_id)
 
 
 @router.post('/', response_model=task_schema.TaskOut, description='Create a new task')
-def create_new_task(db: Session = Depends(get_db), task: task_schema.TaskBase = Depends()):
+def create_new_task(db: Session = Depends(get_db), task: task_schema.TaskCreate = Depends()):
     return task_service.create_new_task(db, task)
 
 
-@router.put('/{taskid}', response_model=task_schema.TaskOut, description='Update task')
-def update_task(db: Session = Depends(get_db), taskid: int = 0, task: task_schema.TaskBase = Depends()):
-    return task_service.update_task(db, taskid, task)
+@router.put('/', response_model=task_schema.TaskOut, description='Update task')
+def update_task(db: Session = Depends(get_db), task_id: int = 0, task: task_schema.TaskBase = Depends()):
+    return task_service.update_task(db, task_id, task)
 
 
-@router.patch('/{taskid}', response_model=task_schema.TaskOut, description='Update task fields')
-def patch_task(db: Session = Depends(get_db), taskid: int = 0, task: task_schema.TaskBase = Depends()):
-    return task_service.patch_task(db, taskid, task)
+@router.patch('/', response_model=task_schema.TaskOut, description='Update task fields')
+def patch_task(db: Session = Depends(get_db), task_id: int = 0, task: task_schema.TaskBase = Depends()):
+    return task_service.patch_task(db, task_id, task)
 
 
-@router.delete('/{taskid}', description='Delete task', responses={200: {'detail': 'Task deleted'}},
+@router.delete('/', description='Delete task', responses={200: {'detail': 'Task deleted'}},
                dependencies=[Depends(authentication_service.oauth2_schema)])
-def delete_task(db: Session = Depends(get_db), taskid: int = 0):
-    return task_service.delete_task(db, taskid)
+def delete_task(db: Session = Depends(get_db), task_id: int = 0):
+    return task_service.delete_task(db, task_id)

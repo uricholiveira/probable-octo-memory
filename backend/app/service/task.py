@@ -5,31 +5,43 @@ from typing import Union, List
 
 from app.model import task as model
 from app.schema import task as schema
-from app.service import user as user_service
+from app.service import user as user_service, category as category_service, priority as priority_service, \
+    situation as situation_service
+
+
+def check_fields(db: Session, task: Union[schema.TaskBase, schema.TaskPatch]):
+    user_service.get_user_by_id(db, task.dict().get('user_owner_id'))
+    situation_service.get_situation_by_id(db, task.dict().get('situation_id'))
+    priority_service.get_priority_by_id(db, task.dict().get('priority_id'))
+    category_service.get_category_by_id(db, task.dict().get('category_id'))
+
+
+def check_fields_to_create(db: Session, task: Union[schema.TaskBase, schema.TaskPatch]):
+    user_service.get_user_by_id(db, task.dict().get('user_owner_id'))
+    situation_service.get_situation_by_id(db, task.dict().get('situation_id'))
 
 
 def get_all_task(db: Session, skip: int = 0, limit: int = 100) -> List[model.Task]:
     return db.query(model.Task).offset(skip).limit(limit).all()
 
 
-def get_task_by_id(db: Session, taskid: int) -> Union[model.Task, HTTPException]:
-    task = db.query(model.Task).filter(model.Task.id == taskid).first()
+def get_task_by_id(db: Session, task_id: int) -> Union[model.Task, HTTPException]:
+    task = db.query(model.Task).filter(model.Task.id == task_id).first()
     if not task:
-        raise HTTPException(status_code=404, detail='Taks not found')
+        raise HTTPException(status_code=404, detail='Task not found')
     return task
 
 
-def create_new_task(db: Session, task: schema.TaskBase) -> Union[model.Task, HTTPException]:
-    is_user = user_service.get_user_by_id(db, task.dict().get('owner'))
-    if not is_user:
-        raise HTTPException(status_code=404, detail='User not found')
-    new_task = model.Task(**task.dict())
+def create_new_task(db: Session, task: schema.TaskCreate) -> Union[model.Task, HTTPException]:
+    check_fields_to_create(db, task)
+    category = category_service.get_category_by_id(db, task.dict().get('category_id'))
+    new_task = model.Task(**task.dict(), priority_id=category.priority_id)
 
     db.add(new_task)
     db.commit()
     db.refresh(new_task)
 
-    new_task_user = model.TaskUser(user=new_task.owner, task=new_task.id, is_owner=True)
+    new_task_user = model.TaskUser(user=new_task.user_owner_id, task=new_task.id)
     db.add(new_task_user)
     db.commit()
     db.refresh(new_task)
@@ -37,8 +49,9 @@ def create_new_task(db: Session, task: schema.TaskBase) -> Union[model.Task, HTT
     return new_task
 
 
-def update_task(db: Session, taskid: int, task: schema.TaskBase) -> Union[model.Task, HTTPException]:
-    updated_task = get_task_by_id(db, taskid)
+def update_task(db: Session, task_id: int, task: schema.TaskBase) -> Union[model.Task, HTTPException]:
+    check_fields(db, task)
+    updated_task = get_task_by_id(db, task_id)
     for field in task.dict(exclude_none=True):
         setattr(updated_task, field, task.dict()[field])
     db.add(updated_task)
@@ -47,8 +60,9 @@ def update_task(db: Session, taskid: int, task: schema.TaskBase) -> Union[model.
     return updated_task
 
 
-def patch_task(db: Session, taskid: int, task: schema.TaskBase) -> Union[model.Task, HTTPException]:
-    updated_task = get_task_by_id(db, taskid)
+def patch_task(db: Session, task_id: int, task: schema.TaskPatch) -> Union[model.Task, HTTPException]:
+    check_fields(db, task)
+    updated_task = get_task_by_id(db, task_id)
     for field in task.dict(exclude_unset=True, exclude_none=True):
         setattr(updated_task, field, task.dict()[field])
     db.add(updated_task)
@@ -57,35 +71,8 @@ def patch_task(db: Session, taskid: int, task: schema.TaskBase) -> Union[model.T
     return updated_task
 
 
-def delete_task(db: Session, taskid: int) -> Union[JSONResponse, HTTPException]:
-    task = get_task_by_id(db, taskid)
+def delete_task(db: Session, task_id: int) -> Union[JSONResponse, HTTPException]:
+    task = get_task_by_id(db, task_id)
     db.delete(task)
     db.commit()
     return JSONResponse(status_code=200, content={'detail': 'Task deleted'})
-
-
-def add_user_to_task(db: Session, task=schema.TaskUserBase) -> Union[model.Task, HTTPException]:
-    task_model = get_task_by_id(db, task.task)
-    user = user_service.get_user_by_id(db, task.user)
-    new_task_user_exist = db.query(model.TaskUser).filter(model.TaskUser.user == user.id,
-                                                          model.TaskUser.task == task_model.id).first()
-    if new_task_user_exist:
-        raise HTTPException(status_code=409, detail="User already in this task")
-    new_task_user = model.TaskUser(**task.dict())
-    db.add(new_task_user)
-    db.commit()
-    db.refresh(new_task_user)
-
-    return task_model
-
-
-def del_user_from_task(db: Session, taskid: int, userid: int) -> Union[JSONResponse, HTTPException]:
-    task = get_task_by_id(db, taskid)
-    task_user = db.query(model.TaskUser).filter(model.TaskUser.user == userid, model.TaskUser.task == task.id).first()
-    if not task_user:
-        raise HTTPException(status_code=404, detail='User is not in task')
-    if task_user.is_owner:
-        raise HTTPException(status_code=409, detail='Cannot delete a user owner')
-    db.delete(task_user)
-    db.commit()
-    return JSONResponse(status_code=200, content={'message': 'User removed from task'})

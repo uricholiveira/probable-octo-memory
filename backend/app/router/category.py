@@ -9,14 +9,14 @@ from app.schema import category as schema, authentication as authentication_sche
 router = APIRouter(prefix='/category', tags=['Category'])
 
 
-@router.get('/', response_model=List[schema.CategoryOut], description='Get list of all categories')
+@router.get('/all', response_model=List[schema.CategoryOut], description='Get list of all categories')
 def get_all_categories(db: Session = Depends(get_db), skip: int = 0, limit: int = 100):
     return service.get_all_categories(db=db, skip=skip, limit=limit)
 
 
 @router.get('/', response_model=schema.CategoryOut, description='Get category by ID')
-def get_category_by_id(db: Session = Depends(get_db), categoryid: int = None):
-    return service.get_category_by_id(db, categoryid)
+def get_category_by_id(db: Session = Depends(get_db), category_id: int = None):
+    return service.get_category_by_id(db, category_id)
 
 
 @router.post('/', response_model=schema.CategoryOut, description='Create a new category')
@@ -25,16 +25,16 @@ def create_new_category(db: Session = Depends(get_db), category: schema.Category
 
 
 @router.put('/', response_model=schema.CategoryOut, description='Update category')
-def update_category(db: Session = Depends(get_db), categoryid: int = 0, category: schema.CategoryBase = Depends()):
-    return service.update_category(db, categoryid, category)
+def update_category(db: Session = Depends(get_db), category_id: int = 0, category: schema.CategoryBase = Depends()):
+    return service.update_category(db, category_id, category)
 
 
 @router.patch('/', response_model=schema.CategoryOut, description='Update category fields')
-def patch_category(db: Session = Depends(get_db), categoryid: int = 0, category: schema.CategoryBase = Depends()):
-    return service.patch_category(db, categoryid, category)
+def patch_category(db: Session = Depends(get_db), category_id: int = 0, category: schema.CategoryPatch = Depends()):
+    return service.patch_category(db, category_id, category)
 
 
 @router.delete('/', description='Delete category', responses={200: {'detail': 'Category deleted'}},
                dependencies=[Depends(authentication_service.oauth2_schema)])
-def delete_category(db: Session = Depends(get_db), categoryid: int = 0):
-    return service.delete_category(db, categoryid)
+def delete_category(db: Session = Depends(get_db), category_id: int = 0):
+    return service.delete_category(db, category_id)

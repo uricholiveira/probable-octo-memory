@@ -1,12 +1,18 @@
 from pydantic import BaseModel
+from typing import Optional
 
-from app.schema import task
 
 class AnnotationBase(BaseModel):
     description: str
+    task: int
+
+
+class AnnotationPatch(BaseModel):
+    description: Optional[str]
+
 
 class AnnotationOut(AnnotationBase):
-    task: task.TaskOut
+    id: int
 
     class Config:
         orm_mode = True

@@ -1,12 +1,16 @@
 from pydantic import BaseModel
+from typing import Optional
 
-from app.schema import task
 
 class PriorityBase(BaseModel):
     description: str
 
-class PriorityOut(PriorityBase):
-    task: task.TaskOut
 
+class PriorityPatch(BaseModel):
+    description: Optional[str]
+
+
+class PriorityOut(PriorityBase):
+    id: int
     class Config:
         orm_mode = True

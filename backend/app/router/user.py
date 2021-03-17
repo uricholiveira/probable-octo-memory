@@ -12,14 +12,14 @@ from app.schema import user as user_schema, authentication as authentication_sch
 router = APIRouter(prefix='/user', tags=['User'])
 
 
-@router.get('/', response_model=List[user_schema.UserOut], description='Get list of all users')
+@router.get('/all', response_model=List[user_schema.UserOut], description='Get list of all users')
 def get_all_users(db: Session = Depends(get_db), skip: int = 0, limit: int = 100):
     return user_service.get_all_users(db=db, skip=skip, limit=limit)
 
 
-@router.get('/{userid}', response_model=user_schema.UserOut, description='Get user by ID')
-def get_user_by_id(db: Session = Depends(get_db), userid: int = None):
-    return user_service.get_user_by_id(db, userid)
+@router.get('/', response_model=user_schema.UserOut, description='Get user by ID')
+def get_user_by_id(db: Session = Depends(get_db), user_id: int = None):
+    return user_service.get_user_by_id(db, user_id)
 
 
 @router.post('/', response_model=user_schema.UserOut, description='Create a new user')
@@ -27,20 +27,20 @@ def create_new_user(db: Session = Depends(get_db), user: user_schema.UserRegiste
     return user_service.create_new_user(db, user)
 
 
-@router.put('/{userid}', response_model=user_schema.UserOut, description='Update user')
-def update_user(db: Session = Depends(get_db), userid: int = 0, user: user_schema.UserIn = Depends()):
-    return user_service.update_user(db, userid, user)
+@router.put('/', response_model=user_schema.UserOut, description='Update user')
+def update_user(db: Session = Depends(get_db), user_id: int = 0, user: user_schema.UserIn = Depends()):
+    return user_service.update_user(db, user_id, user)
 
 
-@router.patch('/{userid}', response_model=user_schema.UserOut, description='Update user fields')
-def patch_user(db: Session = Depends(get_db), userid: int = 0, user: user_schema.UserPatch = Depends()):
-    return user_service.patch_user(db, userid, user)
+@router.patch('/', response_model=user_schema.UserOut, description='Update user fields')
+def patch_user(db: Session = Depends(get_db), user_id: int = 0, user: user_schema.UserPatch = Depends()):
+    return user_service.patch_user(db, user_id, user)
 
 
-@router.delete('/{userid}', description='Delete user', responses={200: {'detail': 'User deleted'}},
+@router.delete('/', description='Delete user', responses={200: {'detail': 'User deleted'}},
                dependencies=[Depends(authentication_service.oauth2_schema)])
-def delete_user(db: Session = Depends(get_db), userid: int = 0):
-    return user_service.delete_user(db, userid)
+def delete_user(db: Session = Depends(get_db), user_id: int = 0):
+    return user_service.delete_user(db, user_id)
 
 
 @router.post('/login')

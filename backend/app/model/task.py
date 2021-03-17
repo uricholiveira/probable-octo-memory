@@ -2,7 +2,7 @@ from sqlalchemy.sql.expression import null
 import arrow
 from app.ext.db import Base
 from passlib.context import CryptContext
-from sqlalchemy import Column, Integer, String, Boolean, DateTime, ForeignKey
+from sqlalchemy import Column, Integer, String, Boolean, DateTime, ForeignKey, Date
 from sqlalchemy.orm import relationship
 
 
@@ -36,13 +36,16 @@ class Task(Base):
     __tablename__ = 'task'
     id = Column(Integer, primary_key=True, index=True, autoincrement=True)
     name = Column(String(255), index=True)
-    owner = Column(Integer, ForeignKey('user.id'))
-    priority = Column(Integer, ForeignKey('priority.id'))
-    category = Column(Integer, ForeignKey('category.id'))
-    situation = Column(Integer, ForeignKey('situation.id'))
-    deadline = Column(DateTime, nullable=True, default=None)
+    user_owner_id = Column(Integer, ForeignKey('user.id'))
+    priority_id = Column(Integer, ForeignKey('priority.id'))
+    category_id = Column(Integer, ForeignKey('category.id'))
+    situation_id = Column(Integer, ForeignKey('situation.id'))
+    deadline = Column(Date, nullable=True, default=None)
     created_at = Column(DateTime, nullable=False, default=arrow.utcnow().datetime)
     arrow.get()
     updated_at = Column(DateTime, nullable=True, default=None, onupdate=arrow.utcnow().datetime)
     users = relationship("User", secondary="task_user", back_populates="tasks")
     annotations = relationship("Annotation", secondary="task_annotation")
+    priority = relationship("Priority")
+    category = relationship("Category")
+    situation = relationship("Situation")
