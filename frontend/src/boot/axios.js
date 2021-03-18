@@ -1,6 +1,7 @@
 import Vue from "vue";
 import axios from "axios";
 import {boot} from "quasar/wrappers"
+import {Dialog, Loading, QSpinnerTail} from "quasar";
 
 Vue.use({
   install(Vue, options) {
@@ -30,16 +31,25 @@ export default boot(function ({app, store}) {
   };
 
   const _axios = axios.create(config);
+  let n = Loading.setDefaults({spinner: QSpinnerTail, spinnerColor: 'white'})
   _axios.interceptors.request.use(config => {
+    Loading.show(n)
     let token = store.getters['user/tokenGetter']
     config.headers['Authorization'] = token ? 'Bearer ' + token : ''
     return config
   }, error => {
+    Loading.hide()
     return Promise.reject(error)
   })
   _axios.interceptors.response.use(response => {
+    Loading.hide()
     return response
   }, error => {
+    Loading.hide()
+    Dialog.create({
+      title: 'Error',
+      message: error.response.data.detail
+    })
     return Promise.reject(error)
   })
 

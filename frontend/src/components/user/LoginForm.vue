@@ -7,11 +7,11 @@
           <q-input v-model="username" dense outlined placeholder="Username" />
         </div>
         <div class="col-12">
-          <q-input v-model="password" dense outlined placeholder="Password" />
+          <q-input v-model="password" clearable dense outlined type="password" placeholder="Password" />
         </div>
       </div>
       <div class="row" style="margin-top: 1rem">
-        <q-btn color="primary" label="Entrar" class="full-width" @click="login"/>
+        <q-btn color="primary" label="Sign in" class="full-width" @click="login"/>
       </div>
     </q-card-section>
   </q-card>
@@ -35,11 +35,8 @@ export default {
             password: this.password,
           },
         },
-        {}
         ).then(response => {
-          console.log(response)
-      }).catch(error => {
-        console.log(error)
+          this.$router.push({name: 'Dashboard'})
       })
     }
   }
