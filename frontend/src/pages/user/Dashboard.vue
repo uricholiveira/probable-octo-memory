@@ -1,7 +1,8 @@
 <template>
   <q-page>
-
-
+    <div class="row justify-center" style="margin-top: -1.5rem">
+      <h4 style="font-weight: bold">Dashboard</h4>
+    </div>
     <div class="row q-gutter-x-md q-pb-lg">
       <div class="col-3">
         <q-select dense outlined :options="filter.options" v-model="filter.selected"/>

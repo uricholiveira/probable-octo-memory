@@ -21,6 +21,7 @@
         :key="key"
         :icon="menu.icon"
         :label="menu.name"
+        :to="{name: menu.pathName}"
         exact
         dense
       >
@@ -50,11 +51,10 @@
         v-for="(config, key) in config.group"
         dense-toggle
         group="somegroup"
-        expand-icon-class="hidden"
         :key="key"
         :icon="config.icon"
         :label="config.name"
-        :hidden="!$store.getters['user/userAdmin']"
+        :to="{name: config.pathName}"
         exact
         dense
       >

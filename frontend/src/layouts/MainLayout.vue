@@ -17,7 +17,7 @@
       </q-toolbar>
     </q-header>
 
-    <q-drawer show-if-above v-model="left" side="left" bordered>
+    <q-drawer show-if-above v-model="left" side="left" behavior="mobile" bordered>
       <!-- drawer content -->
       <SidebarLink :menu="sidebarLinks" :config="configLinks"/>
     </q-drawer>
@@ -44,26 +44,18 @@ export default {
           {
             name: 'Dashboard',
             icon: 'developer_board',
-            submenu: [
-              {title: 'Tarefas', icon: 'developer_board', pathName: 'TaskIndex'},
-            ]
-          },
-          {
-            name: 'Tarefas',
-            icon: 'list_alt',
-            submenu: [
-              {title: 'Atividades', icon: 'playlist_play', pathName: 'Index'},
-            ]
+            pathName: 'Dashboard',
           },
         ]
       },
       configLinks: {
         group: [
           {
-            name: 'Configuração',
+            name: 'Configuration',
             icon: 'settings',
+            pathName: 'Configuration',
             submenu: [
-              {title: 'Usuários', icon: 'manage_accounts', pathName: 'Users'},
+              {title: 'Category', icon: 'manage_accounts', pathName: 'CategoryConfiguration'},
             ]
           },
         ]
