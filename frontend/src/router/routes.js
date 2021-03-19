@@ -14,7 +14,8 @@ const routes = [
     path: '/app',
     component: () => import('layouts/MainLayout.vue'),
     children: [
-      { path: '', component: () => import('pages/Index.vue'), }
+      { path: '', name: 'Dashboard', component: () => import('pages/user/Dashboard.vue') },
+      { path: '/app/task/:id', name: 'TaskDetail', component: () => import('pages/task/Edit.vue') },
     ]
   },
   {

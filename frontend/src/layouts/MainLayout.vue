@@ -5,8 +5,8 @@
       <q-toolbar>
         <q-btn dense flat round icon="menu" @click="left = !left"/>
         <q-space/>
-        <q-input dense outlined bg-color="white" color="red" placeholder="Pesquisa" v-model="textSearch"/>
-        <q-space/>
+<!--        <q-input dense outlined bg-color="white" color="red" placeholder="Pesquisa" v-model="textSearch"/>-->
+<!--        <q-space/>-->
         <div>
           <q-btn round flat @click="avatarDropdown = true">
             <q-avatar>
@@ -23,7 +23,7 @@
     </q-drawer>
 
     <q-page-container>
-      <router-view/>
+      <router-view style="padding: 1.5rem 2rem 1.5rem 2rem"/>
     </q-page-container>
 
   </q-layout>
