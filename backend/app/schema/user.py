@@ -14,12 +14,16 @@ class UserIn(UserBase):
 	name: str
 	lastname: str
 	is_active: Optional[bool]
+	is_admin: Optional[bool]
 
 
 class UserPatch(BaseModel):
 	email: Optional[str]
 	name: Optional[str]
-	is_active: Optional[str]
+	lastname: Optional[str]
+	username: str
+	is_active: Optional[bool]
+	is_admin: Optional[bool]
 
 
 class UserRegister(UserIn):
@@ -27,8 +31,8 @@ class UserRegister(UserIn):
 
 
 class UserOut(UserIn):
+	id: int
 	created_at: datetime = None
-	is_admin: bool
 
 	@validator("created_at", pre=True)
 	def created_at_validate(cls, date):

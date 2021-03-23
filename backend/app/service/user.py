@@ -53,7 +53,7 @@ def update_user(db: Session, user_id: int, user: schema.UserIn) -> Union[model.U
     return updated_user
 
 
-def patch_user(db: Session, user_id: int, user: schema.UserIn) -> Union[model.User, HTTPException]:
+def patch_user(db: Session, user_id: int, user: schema.UserPatch) -> Union[model.User, HTTPException]:
     updated_user = get_user_by_id(db, user_id)
     for field in user.dict(exclude_unset=True, exclude_none=True):
         setattr(updated_user, field, user.dict()[field])

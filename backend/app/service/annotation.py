@@ -19,6 +19,13 @@ def get_annotation_by_id(db: Session, annotation_id: int) -> Union[model.Annotat
     return annotation
 
 
+def get_annotation_by_task_id(db: Session, task_id: int) -> Union[model.Annotation, List]:
+    annotation = db.query(model.Annotation).filter(model.Annotation.task_id == task_id).all()
+    if not annotation:
+        return []
+    return annotation
+
+
 def create_new_annotation(db: Session, annotation: schema.AnnotationBase) -> Union[model.Annotation, HTTPException]:
     task_service.get_task_by_id(db, annotation.dict().get('task_id'))
     new_annotation = model.Annotation(**annotation.dict())
@@ -27,7 +34,7 @@ def create_new_annotation(db: Session, annotation: schema.AnnotationBase) -> Uni
     db.commit()
     db.refresh(new_annotation)
 
-    new_task_annotation = task_model.TaskAnnotation(annotation=new_annotation.id, task=new_annotation.task)
+    new_task_annotation = task_model.TaskAnnotation(annotation=new_annotation.id, task=new_annotation.task_id)
     db.add(new_task_annotation)
     db.commit()
     db.refresh(new_annotation)

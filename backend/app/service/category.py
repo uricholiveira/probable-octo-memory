@@ -41,7 +41,6 @@ def create_new_category(db: Session, category: schema.CategoryBase) -> Union[mod
 def update_category(db: Session, category_id: int, category: schema.CategoryBase) -> Union[
     model.Category, HTTPException]:
     priority_service.get_priority_by_id(db, category.dict().get('priority_id'))
-    get_category_by_name(db, category.dict().get('name'))
     updated_category = get_category_by_id(db, category_id)
     for field in category.dict(exclude_none=True):
         setattr(updated_category, field, category.dict()[field])
@@ -54,7 +53,6 @@ def update_category(db: Session, category_id: int, category: schema.CategoryBase
 def patch_category(db: Session, category_id: int, category: schema.CategoryPatch) -> Union[
     model.Category, HTTPException]:
     priority_service.get_priority_by_id(db, category.dict().get('priority_id'))
-    get_category_by_name(db, category.dict().get('name'))
     updated_category = get_category_by_id(db, category_id)
     for field in category.dict(exclude_unset=True, exclude_none=True):
         setattr(updated_category, field, category.dict()[field])

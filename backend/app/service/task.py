@@ -49,6 +49,39 @@ def create_new_task(db: Session, task: schema.TaskCreate) -> Union[model.Task, H
     return new_task
 
 
+def start_task(db: Session, task_id: int) -> Union[model.Task, HTTPException]:
+    task = get_task_by_id(db, task_id)
+    task.situation_id = 2
+
+    db.add(task)
+    db.commit()
+    db.refresh(task)
+
+    return task
+
+
+def pause_task(db: Session, task_id: int) -> Union[model.Task, HTTPException]:
+    task = get_task_by_id(db, task_id)
+    task.situation_id = 1
+
+    db.add(task)
+    db.commit()
+    db.refresh(task)
+
+    return task
+
+
+def deliver_task(db: Session, task_id: int) -> Union[model.Task, HTTPException]:
+    task = get_task_by_id(db, task_id)
+    task.situation_id = 5
+
+    db.add(task)
+    db.commit()
+    db.refresh(task)
+
+    return task
+
+
 def update_task(db: Session, task_id: int, task: schema.TaskBase) -> Union[model.Task, HTTPException]:
     check_fields(db, task)
     updated_task = get_task_by_id(db, task_id)

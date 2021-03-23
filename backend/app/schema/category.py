@@ -10,7 +10,7 @@ class CategoryBase(BaseModel):
 
 
 class CategoryPatch(BaseModel):
-    name: Optional[int]
+    name: Optional[str]
     priority_id: Optional[int]
 
 

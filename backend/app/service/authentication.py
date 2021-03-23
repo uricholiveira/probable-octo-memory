@@ -15,7 +15,7 @@ from app.service import user as user_service
 oauth2_schema = OAuth2PasswordBearer(tokenUrl='/user/api/login')
 
 
-def authenticate_user(db: Session, form: OAuth2PasswordRequestForm) -> Union[
+def authenticate_user(db: Session, form: authentication_schema.Login) -> Union[
     user_model.User, HTTPException]:
     user = user_service.get_user_by_username(db, form.username)
     if not user.check_password(form.password):

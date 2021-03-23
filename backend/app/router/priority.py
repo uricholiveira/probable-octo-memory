@@ -35,6 +35,6 @@ def patch_priority(db: Session = Depends(get_db), priority_id: int = 0, priority
 
 
 @router.delete('/', description='Delete priority', responses={200: {'detail': 'Priority deleted'}},
-               dependencies=[Depends(authentication_service.oauth2_schema)])
+               dependencies=[])
 def delete_priority(db: Session = Depends(get_db), priority_id: int = 0):
     return service.delete_priority(db, priority_id)

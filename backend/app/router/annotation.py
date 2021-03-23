@@ -19,6 +19,11 @@ def get_annotation_by_id(db: Session = Depends(get_db), annotation_id: int = Non
     return service.get_annotation_by_id(db, annotation_id)
 
 
+@router.get('/task', response_model=List[schema.AnnotationOut], description='Get annotation by ID')
+def get_annotation_by_task_id(db: Session = Depends(get_db), task_id: int = None):
+    return service.get_annotation_by_task_id(db, task_id)
+
+
 @router.post('/', response_model=schema.AnnotationOut, description='Create a new annotation')
 def create_new_annotation(db: Session = Depends(get_db), annotation: schema.AnnotationBase = Depends()):
     return service.create_new_annotation(db, annotation)
@@ -37,6 +42,6 @@ def patch_annotation(db: Session = Depends(get_db), annotation_id: int = 0,
 
 
 @router.delete('/', description='Delete annotation', responses={200: {'detail': 'Annotation deleted'}},
-               dependencies=[Depends(authentication_service.oauth2_schema)])
+               dependencies=[])
 def delete_annotation(db: Session = Depends(get_db), annotation_id: int = 0):
     return service.delete_annotation(db, annotation_id)

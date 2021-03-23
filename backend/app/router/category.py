@@ -35,6 +35,6 @@ def patch_category(db: Session = Depends(get_db), category_id: int = 0, category
 
 
 @router.delete('/', description='Delete category', responses={200: {'detail': 'Category deleted'}},
-               dependencies=[Depends(authentication_service.oauth2_schema)])
+               dependencies=[])
 def delete_category(db: Session = Depends(get_db), category_id: int = 0):
     return service.delete_category(db, category_id)

@@ -38,7 +38,7 @@ def patch_user(db: Session = Depends(get_db), user_id: int = 0, user: user_schem
 
 
 @router.delete('/', description='Delete user', responses={200: {'detail': 'User deleted'}},
-               dependencies=[Depends(authentication_service.oauth2_schema)])
+               dependencies=[])
 def delete_user(db: Session = Depends(get_db), user_id: int = 0):
     return user_service.delete_user(db, user_id)
 
@@ -51,7 +51,7 @@ def login(db: Session = Depends(get_db), form: authentication_schema.Login = Dep
     access_token_expires = timedelta(minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES)
     access_token = authentication_service.create_access_token(data={'sub': user.email},
                                                               expires_delta=access_token_expires)
-    return {'access_token': access_token, 'token_type': 'Bearer'}
+    return {'access_token': access_token, 'token_type': 'Bearer', **user.__dict__}
 
 @router.post('/api/login')
 def login(db: Session = Depends(get_db), form: OAuth2PasswordRequestForm = Depends()):

@@ -35,6 +35,6 @@ def patch_situation(db: Session = Depends(get_db), situation_id: int = 0, situat
 
 
 @router.delete('/', description='Delete situation', responses={200: {'detail': 'Situation deleted'}},
-               dependencies=[Depends(authentication_service.oauth2_schema)])
+               dependencies=[])
 def delete_situation(db: Session = Depends(get_db), situation_id: int = 0):
     return service.delete_situation(db, situation_id)

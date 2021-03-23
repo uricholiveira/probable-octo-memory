@@ -4,7 +4,7 @@ from typing import Optional
 
 class AnnotationBase(BaseModel):
     description: str
-    task: int
+    task_id: int
 
 
 class AnnotationPatch(BaseModel):
