@@ -55,7 +55,10 @@ export default {
             icon: 'settings',
             pathName: 'Configuration',
             submenu: [
+              {title: 'User', icon: 'manage_accounts', pathName: 'UserConfiguration'},
               {title: 'Category', icon: 'manage_accounts', pathName: 'CategoryConfiguration'},
+              {title: 'Situation', icon: 'manage_accounts', pathName: 'SituationConfiguration'},
+              {title: 'Priority', icon: 'manage_accounts', pathName: 'PriorityConfiguration'},
             ]
           },
         ]

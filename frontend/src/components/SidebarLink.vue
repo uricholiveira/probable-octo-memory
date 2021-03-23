@@ -8,7 +8,7 @@
           </q-avatar>
         </div>
         <div class="row justify-center" style="margin-top: 2rem;">
-          Hello USER! Welcome back
+          Hello {{$store.getters['user/userFullname']}}! Welcome back
         </div>
       </div>
     </div>

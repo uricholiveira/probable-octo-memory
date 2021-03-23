@@ -12,13 +12,15 @@
 </template>
 
 <script>
-import TaskForm from "components/task/TaskForm";
-import AnnotationList from "components/task/AnnotationList";
+import TaskForm from "components/task/forms/TaskForm";
+import AnnotationList from "components/task/lists/AnnotationList";
 export default {
   name: "Edit",
   components: {AnnotationList, TaskForm},
   props: {},
   data: () => ({}),
+  methods: {
+  }
 }
 </script>
 

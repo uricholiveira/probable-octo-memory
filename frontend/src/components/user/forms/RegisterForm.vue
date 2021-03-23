@@ -5,20 +5,20 @@
         <div class="row q-gutter-sm justify-center">
           <div class="row justify-between q-gutter-xs">
             <div class="col">
-              <q-input v-model="name" dense outlined placeholder="Name"/>
+              <q-input v-model="name" dense outlined label="Name"/>
             </div>
             <div class="col">
-              <q-input v-model="lastname" dense outlined placeholder="Lastname"/>
+              <q-input v-model="lastname" dense outlined label="Lastname"/>
             </div>
           </div>
           <div class="col-12 q-gutter-sm">
-            <q-input v-model="username" dense outlined placeholder="Username"/>
+            <q-input v-model="username" dense outlined label="Username"/>
           </div>
           <div class="col-12 q-gutter-sm">
-            <q-input v-model="email" dense outlined placeholder="Email"/>
+            <q-input v-model="email" dense outlined label="Email"/>
           </div>
           <div class="col-12 q-gutter-sm">
-            <q-input v-model="password" clearable dense outlined type="password" placeholder="Password"/>
+            <q-input v-model="password" clearable dense outlined type="password" label="Password"/>
           </div>
         </div>
         <div class="row" style="margin-top: 1rem">

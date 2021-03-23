@@ -8,7 +8,7 @@
 </template>
 
 <script>
-import ConfigList from "components/config/ConfigList";
+import ConfigList from "components/config/lists/ConfigList";
 
 export default {
   name: "Index",

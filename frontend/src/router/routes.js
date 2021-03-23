@@ -23,10 +23,10 @@ const routes = [
     component: () => import('layouts/MainLayout'),
     children: [
       { path: '', name: 'Configuration', component: () => import('pages/config/Index') },
-      { path: '/config/user', name: 'UserConfiguration', component: () => import('pages/config/Category') },
+      { path: '/config/user', name: 'UserConfiguration', component: () => import('pages/config/User') },
       { path: '/config/category', name: 'CategoryConfiguration', component: () => import('pages/config/Category') },
-      { path: '/config/situation', name: 'SituationConfiguration', component: () => import('pages/config/Category') },
-      { path: '/config/priority', name: 'PriorityConfiguration', component: () => import('pages/config/Category') },
+      { path: '/config/situation', name: 'SituationConfiguration', component: () => import('pages/config/Situation') },
+      { path: '/config/priority', name: 'PriorityConfiguration', component: () => import('pages/config/Priority') },
     ]
   },
   {

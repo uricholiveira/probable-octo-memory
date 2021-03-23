@@ -28,7 +28,7 @@ export default {
   methods: {
     login() {
       this.$axios.post('/user/login',
-        {},
+        null,
         {
           params: {
             username: this.username,
@@ -36,6 +36,7 @@ export default {
           },
         },
         ).then(response => {
+          this.$store.dispatch("user/setUser", response.data)
           this.$router.push({name: 'Dashboard'})
       })
     }

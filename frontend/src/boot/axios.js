@@ -2,6 +2,7 @@ import Vue from "vue";
 import axios from "axios";
 import {boot} from "quasar/wrappers"
 import {Dialog, Loading, QSpinnerTail} from "quasar";
+import VueRouter from "vue-router";
 
 Vue.use({
   install(Vue, options) {
@@ -18,14 +19,15 @@ Vue.use({
   }
 })
 
-export default boot(function ({app, store}) {
+export default boot(function ({app, store, router}) {
   let config = {
     baseURL:
       process.env.NODE_ENV === "development"
         ? "http://localhost:8000/"
         : "http://localhost:8000/",
     header: {
-      'Access-Control-Allow-Origin': '*'
+      'Access-Control-Allow-Origin': '*',
+      'Content-Type': 'application/json; multipart/form-data;'
     },
     withCredentials: false
   };
@@ -34,7 +36,7 @@ export default boot(function ({app, store}) {
   let n = Loading.setDefaults({spinner: QSpinnerTail, spinnerColor: 'white'})
   _axios.interceptors.request.use(config => {
     Loading.show(n)
-    let token = store.getters['user/tokenGetter']
+    let token = store.getters['user/userGetter'].access_token
     config.headers['Authorization'] = token ? 'Bearer ' + token : ''
     return config
   }, error => {

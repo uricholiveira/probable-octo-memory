@@ -31,7 +31,7 @@
 </template>
 
 <script>
-import LoginForm from "components/user/LoginForm";
+import LoginForm from "components/user/forms/LoginForm";
 
 export default {
   name: "Login",
