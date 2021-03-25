@@ -33,11 +33,11 @@
 export default {
   name: "RegisterForm",
   data: () => ({
-    username: 'pamela.rodrigues',
-    email: 'pamelarodrigues44390@gmail.com',
-    password: '123qweXX',
-    name: 'Pamela',
-    lastname: 'Rodrigues'
+    username: '',
+    email: '',
+    password: '',
+    name: '',
+    lastname: ''
   }),
   methods: {
     register() {
