@@ -24,7 +24,7 @@ export default boot(function ({app, store, router}) {
     baseURL:
       process.env.NODE_ENV === "development"
         ? "http://localhost:8000/"
-        : "http://http://54.207.137.8/",
+        : "http://54.207.137.8/",
     header: {
       'Access-Control-Allow-Origin': '*',
       'Content-Type': 'application/json; multipart/form-data;'
