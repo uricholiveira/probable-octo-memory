@@ -1,5 +1,0 @@
-build:
-  octo-cat-web:
-    web: ./frontend/Dockerfile
-  octo-cat-backend:
-    web: ./frontend/Dockerfile

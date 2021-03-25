@@ -1,13 +1,17 @@
 services:
   backend:
-    build:
-      context: ./backend
-      dockerfile: Dockerfile
+    build: ./backend
+    restart: always
+    environment: 
+      ENV_FOR_DYNACONF: production
     ports:
       - "8000:8000"
   frontend:
     build:
       context: ./frontend
       dockerfile: Dockerfile
+    restart: always
+    depends_on:
+      - backend
     ports: 
-      - "8080:8080"
+      - "8080:80"
